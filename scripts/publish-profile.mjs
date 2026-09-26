@@ -31,12 +31,17 @@ try {
   execFileSync('git', ['clone', '--depth', '1', '--quiet', repo, workspace], { stdio: 'inherit' });
   await writeFile(join(workspace, 'README.md'), markdown, 'utf8');
 
-  if (git('status', '--porcelain').trim() === '') {
+  git('add', 'README.md');
+
+  /*
+   * Ask the index, not the working tree. Git normalises line endings on the
+   * way in, so on Windows a file can look modified in `git status` and still
+   * stage as no change at all — which would then fail as an empty commit.
+   */
+  if (git('diff', '--cached', '--name-only').trim() === '') {
     console.log(`No change: ${user}/${user} already has this README.`);
     process.exit(0);
   }
-
-  git('add', 'README.md');
   git('commit', '--quiet', '-m', 'Update profile README\n\nGenerated from the portfolio by `npm run sync:profile`.');
   git('push', '--quiet', 'origin', 'HEAD');
 
