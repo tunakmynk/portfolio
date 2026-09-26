@@ -59,7 +59,9 @@ export const GET: APIRoute = async ({ site }) => {
     lines.push(`**${group.category.en}:** ${group.items.join(' · ')}  `);
   }
   lines.push('');
-  lines.push(`> ${profile.availability.en}. Based in ${profile.location}.`);
+  /* No location here on purpose: next to the availability line it reads as a
+     limit on where he will work, rather than as a fact about where he lives. */
+  lines.push(`> ${profile.availability.en}.`);
   lines.push('');
   lines.push('<!-- Generated from src/data/profile.ts by `npm run sync`. Do not edit by hand. -->');
   lines.push('');
