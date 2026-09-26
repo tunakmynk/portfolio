@@ -1,6 +1,6 @@
 ### Hi, I'm Tuna 👋
 
-**Backend & Applied AI Engineer** — Final-year Computer Engineering student at Iskenderun Technical University. I like Python, async I/O, and systems where latency and correctness both matter.
+**Backend & Applied AI Engineer** — I’m a final-year Computer Engineering student at Iskenderun Technical University. I like optimizing systems for speed and cost, designing architectures with AI built into them, and reading books that dig into the philosophy of software.
 
 I build the backend systems that take LLMs into production: RAG pipelines, real-time audio streaming, and the API architecture that ties them together.
 

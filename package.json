@@ -10,7 +10,8 @@
     "astro": "astro",
     "sync": "astro build && node scripts/sync-github-readme.mjs",
     "cv": "astro dev && node scripts/open-cv.mjs",
-    "cv:tr": "astro dev && node scripts/open-cv.mjs /tr/cv"
+    "cv:tr": "astro dev && node scripts/open-cv.mjs /tr/cv",
+    "sync:profile": "npm run sync && node scripts/publish-profile.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

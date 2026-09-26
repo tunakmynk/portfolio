@@ -21,8 +21,8 @@ export const profile = {
   } satisfies Localized,
   /** Hero sub-text: who you are right now. */
   summary: {
-    en: 'Final-year Computer Engineering student at Iskenderun Technical University. I like Python, async I/O, and systems where latency and correctness both matter.',
-    tr: 'İskenderun Teknik Üniversitesi’nde son sınıf Bilgisayar Mühendisliği öğrencisiyim. Python’ı, asenkron G/Ç’yi ve hem gecikmenin hem doğruluğun önemli olduğu sistemleri seviyorum.',
+    en: 'I’m a final-year Computer Engineering student at Iskenderun Technical University. I like optimizing systems for speed and cost, designing architectures with AI built into them, and reading books that dig into the philosophy of software.',
+    tr: 'İskenderun Teknik Üniversitesi’nde son sınıf Bilgisayar Mühendisliği öğrencisiyim. Sistemleri hem hız hem de maliyet yönünden optimize etmeyi, yapay zeka entegreli mimariler geliştirmeyi ve yazılımın felsefesine inen kitapları okumayı seviyorum.',
   } satisfies Localized,
   availability: {
     en: 'Open to Backend / AI Engineering roles',
