@@ -24,7 +24,7 @@ const labels = {
     education: 'Education',
     languages: 'Languages',
     print: 'Print / Save as PDF',
-    hint: 'Ctrl+P → Destination: "Save as PDF" → uncheck "Headers and footers". Save over public/cv/Tuna-Kimyonok-CV.pdf.',
+    hint: 'Ctrl+P → Destination: "Save as PDF" → Margins: Default. Save over public/cv/Tuna-Kimyonok-CV.pdf.',
   },
   tr: {
     summary: 'Özet',
@@ -34,7 +34,7 @@ const labels = {
     education: 'Eğitim',
     languages: 'Diller',
     print: 'Yazdır / PDF olarak kaydet',
-    hint: 'Ctrl+P → Hedef: "PDF olarak kaydet" → "Üst bilgi ve alt bilgi" işaretini kaldır. public/cv/Tuna-Kimyonok-Ozgecmis.pdf olarak kaydet.',
+    hint: 'Ctrl+P → Hedef: "PDF olarak kaydet" → Kenar boşlukları: Varsayılan. public/cv/Tuna-Kimyonok-Ozgecmis.pdf olarak kaydet.',
   },
 }[lang];
 ---
@@ -376,9 +376,20 @@ const labels = {
   }
 
   /* Print */
+  /*
+   * margin: 0 is deliberate. Chrome prints its own header and footer — the
+   * date, the page title, the URL, the page number — into the page margin.
+   * With no margin there is nowhere to draw them, so they disappear without
+   * the reader having to untick "Headers and footers" every time. The real
+   * margin moves to .sheet's padding below.
+   *
+   * This works because the CV is one page: padding applies once, while a
+   * page margin would repeat on every page. If the CV ever runs to two pages,
+   * put the margin back here and untick the box in the print dialog instead.
+   */
   @page {
     size: A4;
-    margin: 13mm 14mm;
+    margin: 0;
   }
 
   @media print {
@@ -394,7 +405,7 @@ const labels = {
       width: auto;
       min-height: 0;
       margin: 0;
-      padding: 0;
+      padding: 13mm 14mm;
       box-shadow: none;
     }
   }
