@@ -43,8 +43,8 @@ export const profile = {
    * shown together with this.
    */
   workArrangement: {
-    en: 'Open to remote, hybrid and on-site work, and able to relocate within Türkiye or abroad.',
-    tr: 'Uzaktan, hibrit ve ofiste çalışmaya açığım; Türkiye içinde ya da yurt dışında taşınabilirim.',
+    en: 'Remote, hybrid or on-site, and able to relocate within Türkiye or abroad.',
+    tr: 'Uzaktan, hibrit veya ofiste çalışabilirim; Türkiye içinde ya da yurt dışında taşınabilirim.',
   } satisfies Localized,
   location: 'Hatay, Türkiye',
   email: 'tunakimyonok1@gmail.com',
