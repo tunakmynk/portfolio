@@ -36,9 +36,16 @@ npm run cv
 ```
 
 Tarayıcıda `/cv` açılır. Üstteki siyah çubuktaki butona bas (ya da Ctrl+P):
-**Hedef: "PDF olarak kaydet"**, "Üst bilgi ve alt bilgi" işaretini kaldır.
-Dosyayı `public/cv/Tuna-Kimyonok-CV.pdf` olarak, eskisinin üzerine kaydet.
-Türkçe CV için `/tr/cv` → `public/cv/Tuna-Kimyonok-Ozgecmis.pdf`.
+**Hedef: "PDF olarak kaydet"**, **Kenar boşlukları: Varsayılan**. Dosyayı
+`public/cv/Tuna-Kimyonok-CV.pdf` olarak, eskisinin üzerine kaydet.
+Türkçe CV için `npm run cv:tr` → `public/cv/Tuna-Kimyonok-Ozgecmis.pdf`.
+
+Tarayıcının kendi üst bilgisi (tarih, adres, sayfa numarası) çıkmaz: `@page`
+kenar boşluğu sıfır, gerçek boşluk sayfanın iç dolgusunda. Kutucuğu işaretli
+bırakabilirsin.
+
+`astro.config.mjs` değiştiyse dev sunucusunu yeniden başlat (`npx astro dev
+stop`), yoksa CV eski site adresini gösterir.
 
 ### Sayfaya sığmıyorsa
 
@@ -71,12 +78,14 @@ console.log(h.toFixed(1) + ' mm / 271 mm');
 ## 2. GitHub profilini güncellemek
 
 ```bash
-npm run sync
+npm run sync:profile
 ```
 
-Bu komut siteyi derler, README'yi veriden üretir ve `github-profile/README.md`
-dosyasına yazar. Sonra içeriğini `github.com/tunakmynk/tunakmynk` reposundaki
-`README.md` dosyasına kopyala.
+Bu komut siteyi derler, README'yi veriden üretir, `github-profile/README.md`
+dosyasına yazar ve doğrudan `github.com/tunakmynk/tunakmynk` reposuna gönderir.
+Elle kopyalaman gereken bir şey kalmadı.
+
+Sadece dosyayı üretip göndermek istemiyorsan `npm run sync` yeter.
 
 Tabloya proje eklemek için bir şey yapman gerekmez: yayına aldığın her proje
 otomatik girer. Repo linki olan projeler repoya, olmayanlar (staj projeleri
