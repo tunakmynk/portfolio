@@ -1,0 +1,53 @@
+---
+import { skills } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="section" id="stack">
+  <div class="container">
+    <p class="eyebrow">02</p>
+    <h2 class="section-title">{t('stack.title')}</h2>
+    <p class="section-intro">{t('stack.intro')}</p>
+    <div class="grid">
+      {
+        skills.map((group) => (
+          <div class="group">
+            <h3>{group.category[lang]}</h3>
+            <ul class="chips">
+              {group.items.map((item) => (
+                <li class="chip">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: 2rem 3rem;
+  }
+
+  h3 {
+    margin: 0 0 0.8rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    letter-spacing: 0;
+  }
+
+  .chip {
+    color: var(--text);
+    background: var(--surface);
+  }
+</style>

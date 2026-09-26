@@ -1,0 +1,33 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const t = useTranslations(lang);
+const { category, period, status, draft } = project.data;
+---
+
+<p class="meta">
+  <span class="badge">{t(`status.${status}` as const)}</span>
+  {draft && <span class="badge warn">{t('draft')}</span>}
+  <span>{category}</span>
+  <span class="sep" aria-hidden="true">·</span>
+  <span>{period}</span>
+</p>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--faint);
+  }
+</style>

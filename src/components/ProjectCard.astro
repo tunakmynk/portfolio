@@ -1,0 +1,146 @@
+---
+import { localePath, useTranslations, type Lang } from '../i18n/ui';
+import { projectSlug, type Project } from '../lib/projects';
+import ProjectMeta from './ProjectMeta.astro';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  index: number;
+}
+
+const { project, lang, index } = Astro.props;
+const t = useTranslations(lang);
+const { title, tagline, highlights, stack, links } = project.data;
+const href = localePath(lang, `/projects/${projectSlug(project)}/`);
+---
+
+<article class="card">
+  <span class="index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+  <div class="body">
+    <ProjectMeta project={project} lang={lang} />
+    <h3><a href={href}>{title}</a></h3>
+    <p class="tagline">{tagline}</p>
+
+    {
+      highlights.length > 0 && (
+        <dl class="highlights">
+          {highlights.slice(0, 3).map((h) => (
+            <div>
+              <dt>{h.label}</dt>
+              <dd>{h.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+
+    <ul class="chips">
+      {stack.map((s) => <li class="chip">{s}</li>)}
+    </ul>
+
+    <div class="actions">
+      <a class="read" href={href}>
+        {t('projects.caseStudy')} <span aria-hidden="true">→</span>
+      </a>
+      {links.repo && <a href={links.repo}>{t('link.repo')}</a>}
+      {links.demo && <a href={links.demo}>{t('link.demo')}</a>}
+      {links.video && <a href={links.video}>{t('link.video')}</a>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 1rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s;
+  }
+
+  .card:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  }
+
+  .index {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--faint);
+    padding-top: 0.15rem;
+  }
+
+  h3 {
+    margin: 0.6rem 0 0.4rem;
+    font-size: clamp(1.3rem, 2.6vw, 1.6rem);
+  }
+
+  h3 a {
+    text-decoration: none;
+  }
+
+  .tagline {
+    margin: 0 0 1.25rem;
+    color: var(--muted);
+    max-width: 44rem;
+  }
+
+  .highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .highlights dd {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    order: -1;
+  }
+
+  .highlights div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .highlights dt {
+    font-size: 0.82rem;
+    color: var(--faint);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin-top: 1.5rem;
+    font-size: 0.92rem;
+  }
+
+  .actions a {
+    color: var(--muted);
+  }
+
+  .actions .read {
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .actions .read:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 560px) {
+    .card {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

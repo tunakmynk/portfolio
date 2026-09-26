@@ -1,0 +1,401 @@
+---
+import { profile, skills, experience, education, spokenLanguages } from '../data/profile';
+import { getProjects } from '../lib/projects';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+/* Only projects that have CV bullets written for them. */
+const projects = (await getProjects(lang)).filter((p) => p.data.cv.length > 0);
+
+const siteHost = Astro.site ? Astro.site.host : 'tunakimyonok.vercel.app';
+const strip = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+const labels = {
+  en: {
+    summary: 'Summary',
+    experience: 'Experience',
+    projects: 'Projects',
+    skills: 'Skills',
+    education: 'Education',
+    languages: 'Languages',
+    print: 'Print / Save as PDF',
+    hint: 'Ctrl+P → Destination: "Save as PDF" → uncheck "Headers and footers". Save over public/cv/Tuna-Kimyonok-CV.pdf.',
+  },
+  tr: {
+    summary: 'Özet',
+    experience: 'Deneyim',
+    projects: 'Projeler',
+    skills: 'Yetenekler',
+    education: 'Eğitim',
+    languages: 'Diller',
+    print: 'Yazdır / PDF olarak kaydet',
+    hint: 'Ctrl+P → Hedef: "PDF olarak kaydet" → "Üst bilgi ve alt bilgi" işaretini kaldır. public/cv/Tuna-Kimyonok-Ozgecmis.pdf olarak kaydet.',
+  },
+}[lang];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{profile.name} — CV</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <div class="toolbar no-print">
+      <button type="button" id="print">{labels.print}</button>
+      <p>{labels.hint}</p>
+    </div>
+
+    <main class="sheet">
+      <header class="head">
+        <h1>{profile.name}</h1>
+        <p class="role">{profile.role[lang]}</p>
+        <p class="contact">
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <span>{profile.phone}</span>
+          <span>{profile.location}</span>
+          <a href={profile.linkedin}>{strip(profile.linkedin)}</a>
+          <a href={profile.github}>{strip(profile.github)}</a>
+          <a href={`https://${siteHost}`}>{siteHost}</a>
+        </p>
+      </header>
+
+      <section>
+        <h2>{labels.summary}</h2>
+        <p class="summary">{profile.cvSummary[lang]}</p>
+      </section>
+
+      {
+        experience.length > 0 && (
+          <section>
+            <h2>{labels.experience}</h2>
+            {experience.map((item) => (
+              <article class="entry">
+                <div class="entry-head">
+                  <h3>
+                    {item.title[lang]} <span class="org">· {item.org}</span>
+                  </h3>
+                  <span class="period">{item.period[lang]}</span>
+                </div>
+                <ul>
+                  {item.points[lang].map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </section>
+        )
+      }
+
+      {
+        projects.length > 0 && (
+          <section>
+            <h2>{labels.projects}</h2>
+            {projects.map((project) => (
+              <article class="entry">
+                <div class="entry-head">
+                  <h3>
+                    {project.data.links.repo ? (
+                      <a href={project.data.links.repo}>{project.data.title}</a>
+                    ) : (
+                      project.data.title
+                    )}
+                  </h3>
+                  <span class="period">{project.data.period}</span>
+                </div>
+                <p class="stack">{project.data.stack.join(' · ')}</p>
+                <ul>
+                  {project.data.cv.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </section>
+        )
+      }
+
+      <section>
+        <h2>{labels.skills}</h2>
+        <dl class="skills">
+          {
+            skills.map((group) => (
+              <div class="skill-row">
+                <dt>{group.category[lang]}</dt>
+                <dd>{group.items.join(' · ')}</dd>
+              </div>
+            ))
+          }
+          <div class="skill-row">
+            <dt>{labels.languages}</dt>
+            <dd>{spokenLanguages.map((l) => `${l.name[lang]} (${l.level[lang]})`).join(' · ')}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section>
+        <h2>{labels.education}</h2>
+        {
+          education.map((item) => (
+            <article class="entry">
+              <div class="entry-head">
+                <h3>
+                  {item.title[lang]} <span class="org">· {item.org}</span>
+                </h3>
+                <span class="period">{item.period[lang]}</span>
+              </div>
+              {item.points[lang].length > 0 && (
+                <ul>
+                  {item.points[lang].map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          ))
+        }
+      </section>
+    </main>
+
+    <script>
+      document.getElementById('print')?.addEventListener('click', () => window.print());
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* This page is print-first: always light, always ink on white, no theme toggle. */
+  :root {
+    color-scheme: light;
+    /* The single density knob: every size below is relative to this. */
+    /*
+     * Everything on this page scales from here: type sizes are in rem and
+     * spacing in rem, so lowering this tightens the whole CV evenly.
+     * Measured fit on A4 (271 mm usable) with the current content:
+     * 9.8pt → 277 mm (overflows), 9.6pt → 271.4 mm (0.4 mm over), 9.4pt → 266 mm.
+     * 9.4pt is about as small as this should go. If the CV grows again,
+     * cut a bullet rather than lowering this further.
+     */
+    --density: 9.4pt;
+    --ink: #14161a;
+    --soft: #4a4d55;
+    --rule: #c9c7c1;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: var(--density);
+  }
+
+  body {
+    margin: 0;
+    background: #f1efea;
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.42;
+  }
+
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 1.25rem auto;
+    padding: 13mm 14mm;
+    background: #fff;
+    box-shadow: 0 2px 20px rgb(0 0 0 / 0.12);
+  }
+
+  /* Header */
+  .head {
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.9rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2.06rem;
+    letter-spacing: -0.015em;
+  }
+
+  .role {
+    margin: 0.1rem 0 0.35rem;
+    font-size: 1.08rem;
+    color: var(--soft);
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.7rem;
+    margin: 0;
+    font-size: 0.87rem;
+    color: var(--soft);
+  }
+
+  .contact > * + *::before {
+    content: '·';
+    margin-right: 0.7rem;
+    color: var(--rule);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Sections */
+  section {
+    margin-bottom: 0.85rem;
+  }
+
+  h2 {
+    margin: 0 0 0.45rem;
+    padding-bottom: 0.15rem;
+    border-bottom: 0.75px solid var(--rule);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .summary {
+    margin: 0;
+  }
+
+  .entry {
+    margin-bottom: 0.6rem;
+    break-inside: avoid;
+  }
+
+  .entry:last-child {
+    margin-bottom: 0;
+  }
+
+  .entry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.04rem;
+    font-weight: 700;
+  }
+
+  .org {
+    font-weight: 400;
+    color: var(--soft);
+  }
+
+  .period {
+    flex: none;
+    font-size: 0.87rem;
+    color: var(--soft);
+    white-space: nowrap;
+  }
+
+  .stack {
+    margin: 0.1rem 0 0.2rem;
+    font-size: 0.87rem;
+    color: var(--soft);
+  }
+
+  ul {
+    margin: 0.2rem 0 0;
+    padding-left: 1.05rem;
+  }
+
+  li {
+    margin-bottom: 0.12rem;
+  }
+
+  /* Skills */
+  .skills {
+    margin: 0;
+  }
+
+  .skill-row {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.15rem;
+  }
+
+  dt {
+    flex: 0 0 8.5rem;
+    font-weight: 700;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--soft);
+  }
+
+  /* Screen-only toolbar */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 1.2rem;
+    background: #14161a;
+    color: #fff;
+  }
+
+  .toolbar p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #b8bcc4;
+  }
+
+  .toolbar button {
+    flex: none;
+    padding: 0.45rem 0.9rem;
+    border: 0;
+    border-radius: 6px;
+    background: #fff;
+    color: #14161a;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Print */
+  @page {
+    size: A4;
+    margin: 13mm 14mm;
+  }
+
+  @media print {
+    body {
+      background: #fff;
+    }
+
+    .no-print {
+      display: none !important;
+    }
+
+    .sheet {
+      width: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+  }
+</style>

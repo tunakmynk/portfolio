@@ -1,0 +1,258 @@
+---
+import '../styles/global.css';
+import { profile } from '../data/profile';
+import { assetPath, localePath, otherLang, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Path of this page without language prefix, e.g. "/projects/foo/". */
+  path: string;
+  /** Path of the equivalent page in the other language, if it exists. */
+  altPath?: string;
+}
+
+const { lang, title, description, path, altPath } = Astro.props;
+const t = useTranslations(lang);
+const alt = otherLang(lang);
+
+const pageTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.role[lang]}`;
+const pageDescription = description ?? t('meta.description');
+const site = Astro.site;
+const abs = (p: string) => (site ? new URL(p, site).href : p);
+const home = localePath(lang, '/');
+const altHref = localePath(alt, altPath ?? '/');
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="icon" type="image/svg+xml" href={assetPath('/favicon.svg')} />
+    <link rel="canonical" href={abs(localePath(lang, path))} />
+    <link rel="alternate" hreflang={lang} href={abs(localePath(lang, path))} />
+    {altPath && <link rel="alternate" hreflang={alt} href={abs(localePath(alt, altPath))} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:locale" content={lang === 'tr' ? 'tr_TR' : 'en_US'} />
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip visually-hidden" href="#main">{t('skip')}</a>
+
+    <header class="site-header">
+      <div class="container bar">
+        <a class="brand" href={home}>{profile.name}</a>
+        <nav aria-label="Primary">
+          <ul class="nav-links">
+            <li><a href={`${home}#projects`}>{t('nav.projects')}</a></li>
+            <li><a href={`${home}#stack`}>{t('nav.stack')}</a></li>
+            <li><a href={`${home}#experience`}>{t('nav.experience')}</a></li>
+            <li><a href={`${home}#contact`}>{t('nav.contact')}</a></li>
+          </ul>
+        </nav>
+        <div class="tools">
+          <a class="tool" href={altHref} hreflang={alt} lang={alt} aria-label={t('lang.switchLabel')}>
+            {t('lang.switch')}
+          </a>
+          <button class="tool" type="button" id="theme-toggle" aria-label={t('theme.toggle')}>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M20.7 14.6A8.5 8.5 0 0 1 9.4 3.3 8.5 8.5 0 1 0 20.7 14.6Z" />
+            </svg>
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.5" fill="currentColor" />
+              <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+              </g>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container foot">
+        <span>© {new Date().getFullYear()} {profile.name}</span>
+        <span class="foot-links">
+          <a href={profile.github}>GitHub</a>
+          <a href={profile.linkedin}>LinkedIn</a>
+          <a href={`mailto:${profile.email}`}>Email</a>
+        </span>
+        <a class="foot-built" href={profile.sourceRepo}>{t('footer.built')}</a>
+      </div>
+    </footer>
+
+    <script>
+      const button = document.getElementById('theme-toggle');
+      const root = document.documentElement;
+      const isDark = () =>
+        root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      button?.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {}
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip:focus {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    height: auto;
+    clip: auto;
+    z-index: 100;
+    padding: 0.5rem 0.9rem;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: 8px;
+  }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 3.75rem;
+  }
+
+  .brand {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  nav {
+    margin-left: auto;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.93rem;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .nav-links a:hover {
+    color: var(--text);
+  }
+
+  .tools {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .tool {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding-inline: 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: 600 0.78rem var(--font-mono);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .tool:hover {
+    color: var(--text);
+    border-color: var(--muted);
+  }
+
+  .icon-sun {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .icon-sun {
+      display: block;
+    }
+    :global(:root:not([data-theme='light'])) .icon-moon {
+      display: none;
+    }
+  }
+
+  :global(:root[data-theme='dark']) .icon-sun {
+    display: block;
+  }
+  :global(:root[data-theme='dark']) .icon-moon {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    nav {
+      display: none;
+    }
+    .tools {
+      margin-left: auto;
+    }
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2rem;
+    color: var(--faint);
+    font-size: 0.88rem;
+  }
+
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+  }
+
+  .foot a {
+    color: var(--muted);
+  }
+
+  .foot-links {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .foot-built {
+    margin-left: auto;
+  }
+</style>

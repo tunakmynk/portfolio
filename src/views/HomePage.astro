@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import TechStack from '../components/TechStack.astro';
+import Experience from '../components/Experience.astro';
+import Contact from '../components/Contact.astro';
+import { getProjects } from '../lib/projects';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+---
+
+<Base lang={lang} path="/" altPath="/">
+  <Hero lang={lang} />
+
+  <section class="section" id="projects">
+    <div class="container">
+      <p class="eyebrow">01</p>
+      <h2 class="section-title">{t('projects.title')}</h2>
+      <p class="section-intro">{t('projects.intro')}</p>
+      <div class="projects">
+        {projects.map((project, index) => <ProjectCard project={project} lang={lang} index={index} />)}
+      </div>
+    </div>
+  </section>
+
+  <TechStack lang={lang} />
+  <Experience lang={lang} />
+  <Contact lang={lang} />
+</Base>
+
+<style>
+  .projects {
+    display: grid;
+    gap: 1.25rem;
+  }
+</style>

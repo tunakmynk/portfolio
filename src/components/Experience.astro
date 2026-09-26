@@ -1,0 +1,104 @@
+---
+import { education, experience, type TimelineItem } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const groups: { title: string; items: TimelineItem[] }[] = [
+  { title: t('experience.title'), items: experience },
+  { title: t('education.title'), items: education },
+].filter((g) => g.items.length > 0);
+---
+
+<section class="section" id="experience">
+  <div class="container">
+    <p class="eyebrow">03</p>
+    {
+      groups.map((group) => (
+        <div class="group">
+          <h2 class="section-title">{group.title}</h2>
+          <ol class="timeline">
+            {group.items.map((item) => (
+              <li>
+                <p class="period">{item.period[lang]}</p>
+                <div>
+                  <h3>{item.title[lang]}</h3>
+                  <p class="org">
+                    {item.org}
+                    {item.location && <span> · {item.location}</span>}
+                  </p>
+                  {item.points[lang].length > 0 && (
+                    <ul>
+                      {item.points[lang].map((point) => (
+                        <li>{point}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .group + .group {
+    margin-top: 3.5rem;
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 1.75rem 0 0;
+  }
+
+  .timeline > li {
+    display: grid;
+    grid-template-columns: 13rem 1fr;
+    gap: 0.25rem 2rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .period {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--faint);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+
+  .org {
+    margin: 0.15rem 0 0;
+    color: var(--muted);
+  }
+
+  ul {
+    margin: 0.9rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+    max-width: 44rem;
+  }
+
+  ul li + li {
+    margin-top: 0.4rem;
+  }
+
+  @media (max-width: 640px) {
+    .timeline > li {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

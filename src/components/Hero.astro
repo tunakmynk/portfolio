@@ -1,0 +1,119 @@
+---
+import { profile } from '../data/profile';
+import { assetPath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="hero">
+  <div class="container">
+    <p class="status"><span class="dot" aria-hidden="true"></span>{profile.availability[lang]}</p>
+    <h1>
+      <span class="name">{profile.name}</span>
+      <span class="role">{profile.role[lang]}</span>
+    </h1>
+    <p class="headline">{profile.headline[lang]}</p>
+    <p class="summary">{profile.summary[lang]}</p>
+    <div class="actions">
+      <a class="btn primary" href="#projects">{t('hero.projects')}</a>
+      <a class="btn" href={assetPath(profile.cv[lang])} download>
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16" />
+        </svg>
+        {t('hero.cv')}
+      </a>
+    </div>
+    <ul class="links">
+      <li><a href={profile.github}>GitHub</a></li>
+      <li><a href={profile.linkedin}>LinkedIn</a></li>
+      <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(4rem, 12vw, 8rem) clamp(3.5rem, 8vw, 5.5rem);
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 1.75rem;
+    padding: 0.3rem 0.8rem 0.3rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  h1 {
+    margin: 0 0 1.5rem;
+  }
+
+  .name {
+    display: block;
+    font-size: clamp(2.6rem, 8vw, 4.75rem);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  .role {
+    display: block;
+    margin-top: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+  }
+
+  .headline {
+    max-width: 42rem;
+    margin: 0 0 1rem;
+    font-size: clamp(1.25rem, 2.8vw, 1.6rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .summary {
+    max-width: 38rem;
+    margin: 0 0 2.25rem;
+    color: var(--muted);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .links a {
+    color: var(--muted);
+  }
+</style>

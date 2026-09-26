@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import { localePath, useTranslations } from '../i18n/ui';
+
+const t = useTranslations('en');
+const tr = useTranslations('tr');
+---
+
+<Base lang="en" title={t('404.title')} path="/404/">
+  <section class="container narrow notfound">
+    <p class="eyebrow">404</p>
+    <h1>{t('404.title')}</h1>
+    <p lang="tr">{tr('404.title')}</p>
+    <div class="actions">
+      <a class="btn primary" href={localePath('en', '/')}>{t('404.back')}</a>
+      <a class="btn" href={localePath('tr', '/')} lang="tr">{tr('404.back')}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .notfound {
+    padding-block: 6rem;
+  }
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: clamp(2rem, 6vw, 3rem);
+  }
+  p[lang] {
+    color: var(--muted);
+    margin: 0 0 2rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>
