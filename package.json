@@ -11,7 +11,9 @@
     "sync": "astro build && node scripts/sync-github-readme.mjs",
     "cv": "astro dev && node scripts/open-cv.mjs",
     "cv:tr": "astro dev && node scripts/open-cv.mjs /tr/cv",
-    "sync:profile": "npm run sync && node scripts/publish-profile.mjs"
+    "sync:profile": "npm run sync && node scripts/publish-profile.mjs",
+    "cv:pdf": "astro dev && node scripts/print-cv.mjs en",
+    "cv:pdf:tr": "astro dev && node scripts/print-cv.mjs tr"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

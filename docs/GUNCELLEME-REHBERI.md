@@ -29,49 +29,45 @@ src/data/profile.ts  +  src/content/projects/**.md
 
 ## 1. CV'yi güncellemek
 
-CV artık Word'de değil, `profile.ts` ve proje dosyalarından üretiliyor.
+CV artık Word'de değil, `profile.ts` ve proje dosyalarından üretiliyor. Elle
+yazdırman da gerekmiyor:
 
 ```bash
-npm run cv
+npm run cv:pdf      # İngilizce  → public/cv/Tuna-Kimyonok-CV.pdf
+npm run cv:pdf:tr   # Türkçe     → public/cv/Tuna-Kimyonok-Ozgecmis.pdf
 ```
 
-Tarayıcıda `/cv` açılır. Üstteki siyah çubuktaki butona bas (ya da Ctrl+P):
-**Hedef: "PDF olarak kaydet"**, **Kenar boşlukları: Varsayılan**. Dosyayı
-`public/cv/Tuna-Kimyonok-CV.pdf` olarak, eskisinin üzerine kaydet.
-Türkçe CV için `npm run cv:tr` → `public/cv/Tuna-Kimyonok-Ozgecmis.pdf`.
+Bu komut siteyi ayağa kaldırır, sayfayı başsız Chrome ile PDF'e basar ve
+**gerçekten tek sayfa olup olmadığını söyler.** İki sayfa olduysa uyarır.
 
-Tarayıcının kendi üst bilgisi (tarih, adres, sayfa numarası) çıkmaz: `@page`
-kenar boşluğu sıfır, gerçek boşluk sayfanın iç dolgusunda. Kutucuğu işaretli
-bırakabilirsin.
-
-`astro.config.mjs` değiştiyse dev sunucusunu yeniden başlat (`npx astro dev
-stop`), yoksa CV eski site adresini gösterir.
+Sayfayı gözünle görmek istersen `npm run cv` (ya da `npm run cv:tr`) tarayıcıda
+açar; oradan elle de basabilirsin.
 
 ### Sayfaya sığmıyorsa
 
-CV tek sayfaya göre ayarlı. A4'ün kullanılabilir alanı **271 mm**. İçerik
-taşarsa `src/views/CvPage.astro` içindeki tek değişkeni düşür:
+CV tek sayfaya göre ayarlı. Taşarsa `src/views/CvPage.astro` içindeki tek
+değişkeni düşür:
 
 ```css
---density: 9.4pt;
+--density: 9.2pt;
 ```
 
 Bu değişken hem yazı boyutunu hem satır aralıklarını birlikte ölçekler.
-Ölçülmüş değerler (mevcut içerikle): `9.8pt → 277 mm`, `9.6pt → 271.4 mm`,
-`9.4pt → 266 mm`.
 
-**9,4 pt bir alt sınırdır.** Bundan aşağısı okunabilirlikten çalar. CV yine
-büyürse küçültmek yerine madde çıkar — en eski projenin en zayıf maddesinden
-başla.
+> **Ekranda ölçerek ayar yapma.** Baskı, ekrandan biraz daha uzun diziliyor:
+> ekranda 1–2 mm payla sığıyor görünen sayfa, PDF'te ikiye bölünebiliyor. Bu
+> tam olarak bir kez başımıza geldi. Doğru yöntem `npm run cv:pdf` çalıştırıp
+> söylediği sayfa sayısına bakmak.
+>
+> Mevcut içerikle kırılma noktası 9,35 pt ile 9,4 pt arasında; 9,2 pt pay
+> bırakıyor. **9 pt civarına indiysen artık küçültme, madde çıkar** — en eski
+> projenin en zayıf maddesinden başla.
 
-Sığıp sığmadığını ölçmek için, `/cv` açıkken tarayıcı konsolunda:
+Tarayıcının kendi üst bilgisi (tarih, adres, sayfa numarası) çıkmaz: `@page`
+kenar boşluğu sıfır, gerçek boşluk sayfanın iç dolgusunda.
 
-```js
-const s = document.querySelector('.sheet'), k = [...s.children];
-const mm = 210 / s.getBoundingClientRect().width;
-const h = (k.at(-1).getBoundingClientRect().bottom - k[0].getBoundingClientRect().top) * mm;
-console.log(h.toFixed(1) + ' mm / 271 mm');
-```
+`astro.config.mjs` değiştiyse dev sunucusunu yeniden başlat (`npx astro dev
+stop`), yoksa CV eski site adresini gösterir.
 
 ---
 

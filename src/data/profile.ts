@@ -44,7 +44,7 @@ export const profile = {
    */
   workArrangement: {
     en: 'Remote, hybrid or on-site, and able to relocate within Türkiye or abroad.',
-    tr: 'Uzaktan, hibrit veya ofiste çalışabilirim; Türkiye içinde ya da yurt dışında taşınabilirim.',
+    tr: 'Uzaktan, hibrit veya ofiste çalışabilirim; Türkiye içinde bir yere ya da yurt dışına taşınabilirim.',
   } satisfies Localized,
   location: 'Hatay, Türkiye',
   email: 'tunakimyonok1@gmail.com',
@@ -55,12 +55,13 @@ export const profile = {
   /** Portfolio source repo, shown in the footer. */
   sourceRepo: 'https://github.com/tunakmynk/portfolio',
   /**
-   * CV files in /public/cv. Replace the PDF to update it (keep the name,
-   * or change the path here). Add a Turkish CV and point `tr` at it.
+   * CV files in /public/cv, both written by `npm run cv:pdf` and
+   * `npm run cv:pdf:tr`. Do not edit them by hand — they are rendered from
+   * this file and the project Markdown.
    */
   cv: {
     en: '/cv/Tuna-Kimyonok-CV.pdf',
-    tr: '/cv/Tuna-Kimyonok-CV.pdf',
+    tr: '/cv/Tuna-Kimyonok-Ozgecmis.pdf',
   } satisfies Localized,
 };
 

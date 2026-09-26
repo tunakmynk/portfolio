@@ -180,12 +180,14 @@ const labels = {
     /*
      * Everything on this page scales from here: type sizes are in rem and
      * spacing in rem, so lowering this tightens the whole CV evenly.
-     * Measured fit on A4 (271 mm usable) with the current content:
-     * 9.8pt → 277 mm (overflows), 9.6pt → 271.4 mm (0.4 mm over), 9.4pt → 266 mm.
-     * 9.4pt is about as small as this should go. If the CV grows again,
-     * cut a bullet rather than lowering this further.
+     * Do not tune this by measuring the page on screen: print lays out a
+     * little taller, so a page that looks like it fits by a millimetre or two
+     * still breaks in two. `npm run cv:pdf` renders the real PDF and reports
+     * the page count — change this value, run that, believe the number.
+     * With the current content the break is between 9.35pt and 9.4pt;
+     * 9.2pt keeps a margin. Below about 9pt, cut a bullet instead.
      */
-    --density: 9.4pt;
+    --density: 9.2pt;
     --ink: #14161a;
     --soft: #4a4d55;
     --rule: #c9c7c1;
