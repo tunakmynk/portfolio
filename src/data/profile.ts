@@ -42,8 +42,8 @@ export const profile = {
   phone: '+90 536 484 6575',
   github: 'https://github.com/tunakmynk',
   linkedin: 'https://www.linkedin.com/in/tunakimyonok',
-  /** Portfolio source repo, shown in the footer. Update after you push it. */
-  sourceRepo: 'https://github.com/tunakmynk',
+  /** Portfolio source repo, shown in the footer. */
+  sourceRepo: 'https://github.com/tunakmynk/portfolio',
   /**
    * CV files in /public/cv. Replace the PDF to update it (keep the name,
    * or change the path here). Add a Turkish CV and point `tr` at it.

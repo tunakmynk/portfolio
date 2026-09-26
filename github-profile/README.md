@@ -2,7 +2,7 @@
 
 **Backend & Applied AI Engineer** — Final-year Computer Engineering student at Iskenderun Technical University. I like Python, async I/O, and systems where latency and correctness both matter.
 
-I build backend systems that put LLMs to work: RAG pipelines, real-time voice, and the APIs that connect them.
+I build the backend systems that take LLMs into production: RAG pipelines, real-time audio streaming, and the API architecture that ties them together.
 
 🌐 **Portfolio & case studies:** [tunakimyonok.vercel.app](https://tunakimyonok.vercel.app) · 📄 [CV](https://tunakimyonok.vercel.app/cv/Tuna-Kimyonok-CV.pdf) · 💼 [LinkedIn](https://www.linkedin.com/in/tunakimyonok) · ✉️ tunakimyonok1@gmail.com
 
