@@ -36,6 +36,16 @@ export const profile = {
     en: 'I build end-to-end backend and applied AI systems and optimize them for speed and cost. During my last internship I built a voice assistant that answers from Turkish national curriculum (MEB) textbooks with its sources shown, from the ESP32-S3 firmware to the FastAPI backend, and cut time to first audio from 11 seconds to 3. I graduate in June 2027 and am available to work full-time.',
     tr: 'Backend ve uygulamalı yapay zekâ alanında uçtan uca sistemler geliştiriyor, bunları hız ve maliyet açısından optimize ediyorum. Son stajımda MEB ders kitaplarından kaynak göstererek cevap veren sesli bir asistanı ESP32-S3 firmware’inden FastAPI backend’ine kadar kurdum; ilk sese kadar geçen süreyi 11 saniyeden 3 saniyeye indirdim. Haziran 2027’de mezun oluyorum ve tam zamanlı çalışmaya uygunum.',
   } satisfies Localized,
+  /**
+   * Where and how he can work. Kept apart from `availability`, which renders as
+   * a small pill in the hero and has to stay short. A bare location next to an
+   * availability line reads as a limit on where he will work, so it is always
+   * shown together with this.
+   */
+  workArrangement: {
+    en: 'Open to remote, hybrid and on-site work, and able to relocate within Türkiye or abroad.',
+    tr: 'Uzaktan, hibrit ve ofiste çalışmaya açığım; Türkiye içinde ya da yurt dışında taşınabilirim.',
+  } satisfies Localized,
   location: 'Hatay, Türkiye',
   email: 'tunakimyonok1@gmail.com',
   /** Shown on the CV only — the site does not publish it. */

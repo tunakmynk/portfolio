@@ -21,7 +21,7 @@ const t = useTranslations(lang);
       <a class="btn" href={profile.github}>GitHub</a>
       <a class="btn primary" href={assetPath(profile.cv[lang])} download>{t('hero.cv')} (PDF)</a>
     </div>
-    <p class="location">{profile.location}</p>
+    <p class="location">{profile.location} · {profile.workArrangement[lang]}</p>
   </div>
 </section>
 

@@ -24,6 +24,6 @@ I build the backend systems that take LLMs into production: RAG pipelines, real-
 **Data & Tooling:** PostgreSQL · Docker Compose · Git & GitHub · Postman  
 **Game & Embedded:** Unity 6 · ESP32-S3 (ESP-IDF)  
 
-> Open to Backend / AI Engineering roles.
+> Open to Backend / AI Engineering roles. Open to remote, hybrid and on-site work, and able to relocate within Türkiye or abroad.
 
 <!-- Generated from src/data/profile.ts by `npm run sync`. Do not edit by hand. -->
